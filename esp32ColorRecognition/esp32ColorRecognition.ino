@@ -1,5 +1,5 @@
 #include "esp_camera.h"
-#define CAMERA_MODEL_AI_THINKER // Has PSRAM
+
 // Timer interval (in milliseconds)
 const long interval = 5000;
 
@@ -10,12 +10,11 @@ void captureAndSend() {
   // Take a picture
   camera_fb_t * fb = NULL;
   fb = esp_camera_fb_get();
-  
   if(!fb) {
     Serial.println("Camera capture failed");
     return;
   }
-
+  Serial.println((int)fb->buf);
   // Get the RGB value of the center pixel
   size_t fbWidth = fb->width;
   size_t fbHeight = fb->height;
@@ -34,7 +33,10 @@ void captureAndSend() {
   Serial.println(blue);
 
   // Free the memory used by the frame buffer
+  //if (fb) {
   esp_camera_fb_return(fb);
+  fb = NULL;
+  //}
 }
 
 void setup() {
